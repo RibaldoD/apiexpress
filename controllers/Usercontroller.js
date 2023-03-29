@@ -1,4 +1,5 @@
 const clienmodel = require('../models/Cliente');
+const regimodel = require('../models/Registro');
 
 const createUser = async(req, res) => {
     try {
@@ -42,7 +43,47 @@ const getclientes = async(req, res) => {
         })
     }
 }
+
+const login = async(req, res) => {
+    console.log(req.body);
+
+    try {
+        const correo = req.body.correo;
+        const contraseña = req.body.contraseña;
+        const user = await regimodel.findOne({ $and: [{ correo: correo }, { Confcontraseña: contraseña }] });
+
+        if (user?._id !== undefined) {
+            res.json({
+                data: user,
+                statusCode: 200,
+                message: "acceso autorizado",
+                path: "login"
+            })
+
+        } else {
+            res.json({
+                error: { error: true },
+                statusCode: 404,
+                message: "ERROR",
+                path: "login"
+            })
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            error: error,
+            statusCode: 500,
+            message: "ERROR",
+            path: "clientes/create"
+
+        })
+        console.log(error);
+    }
+
+}
+
 module.exports = {
     createUser,
-    getclientes
+    getclientes,
+    login
 };

@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 app.use('/clientes', require('./clientes'));
+app.use('/registro', require('./registro'));
 // app.use('/call', require('./call'));
 
 module.exports = app;
